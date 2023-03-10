@@ -32,27 +32,42 @@ class CartController extends Controller
             }
         }
 
-        return view('cart.index', [
+        return route('cart.index', [
             'cartItems' => $cartItems,
             'totalPrice' => $totalPrice,
         ]);
     }
 
-    public function add($productId)
-    {
-        $cart = session()->get('cart', []);
+    public function addToCart(Request $request, $id)
+{
+    $product = Product::find($id);
 
-        if (isset($cart[$productId])) {
-            $cart[$productId]++;
-        } else {
-            $cart[$productId] = 1;
-        }
-
-        session()->put('cart', $cart);
-
-        return redirect()->back()->with('success', 'Product added to cart successfully.');
+    if(!$product) {
+        abort(404);
     }
 
+    $cart = session()->get('cart');
+
+    // If cart is empty then this will be the first product
+    if(!$cart) {
+        $cart = [                $id => [                    "name" => $product->name,                    "quantity" => 1,                    "price" => $product->price,                    "photo" => $product->photo                ]
+        ];
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
+    }
+
+    // If the product is already in cart then increase the quantity
+    if(isset($cart[$id])) {
+        $cart[$id]['quantity']++;
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
+    }
+
+    // If the product is not in cart then add it to cart with quantity = 1
+    $cart[$id] = [            "name" => $product->name,            "quantity" => 1,            "price" => $product->price,            "photo" => $product->photo    ];
+    session()->put('cart', $cart);
+    return redirect()->back()->with('success', 'Product added to cart successfully!');
+}
     public function remove($productId)
     {
         $cart = session()->get('cart', []);

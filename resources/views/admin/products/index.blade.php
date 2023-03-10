@@ -5,7 +5,6 @@
             <div class="col-md-12">
                 <h1>Products</h1>
                 <a href="{{ route('products.create') }}" class="btn btn-primary">Add New Product</a>
-
                 <hr>
 
                 <form action="{{ route('products.search') }}" method="GET">

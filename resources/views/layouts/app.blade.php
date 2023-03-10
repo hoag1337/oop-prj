@@ -82,7 +82,7 @@
 				<ul>
 					@if(Auth::user()->role == 'admin')
 					<li><i  class="fi-rs-user"></i>
-						Hi,Admin {{Auth::user()->name}}
+						Hi {{Auth::user()->name}}
 						<a href="{{route('products.index')}}">Admin Dashboard</a>
 						<form action="{{route('logout')}}" method="post">
 						@csrf

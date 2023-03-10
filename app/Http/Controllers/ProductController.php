@@ -8,12 +8,19 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('product', compact('product'))
+            ->layout('layouts.app', ['title' => $product->name])
+            ->livewire('cart');
+    }
     
     public function search(Request $request)
 {
     $query = $request->input('query');
     $products = Product::where('name', 'LIKE', "%$query%")->get();
-    return view('admin.products.index', compact('products'));
+    return route('products.search', compact('products'));
 }
     public function sort(Request $request,Product $products)
     {
@@ -108,12 +115,7 @@ public function store(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show()
-{
-    $products = Product::all();
 
-    return view('livewire.shop-component', ['products' => $products]);
-}
 
     /**
      * Show the form for editing the specified resource.

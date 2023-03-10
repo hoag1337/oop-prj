@@ -25,16 +25,17 @@
             </form>
             @foreach ($products as $product)
             <div class="col-md-4 prod text-center animate-box">
-                    {{-- <div class="product" style="background-image: url({{$product->image}})" >
+                    <div class="product" style="background-image: url({{$product->image}})" >
                         <a href="#" class="view">
                             <i class="icon-plus"> 
                                 {{$product->description}}
                             </i>
                         </a>
-                    </div> --}}
+                    </div>
                     <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}" />
                     <h3><a href="#">{{$product->name}}</a></h3>
                     <span class="price">${{$product->price}}</span>
+                    <button wire:click="addToCart({{ $product->id }})">Add to Cart</button>
             </div>
             @endforeach
         </div>
